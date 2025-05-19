@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobRECO.Models
 {
     public class User
     {
         public int Id { get; set; }//IDプロパティ
-        public string Username { get; set; } = "";//ユーザー名プロパティ
-        public string PasswordHash { get; set; } = "";//パスワードハッシュプロパティ
 
+        [Required, MaxLength(50)]
+        public string Username { get; set; } = string.Empty;//ユーザー名プロパティ
+
+        [Required]
+        public string PasswordHash { get; set; } = string.Empty;//パスワードハッシュプロパティ
+
+        [MaxLength(100)]
+        public string? DisplayName { get; set; }//ディスプレイネームプロパティ
+
+
+        // ナビゲーションプロパティ
+        public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
     }
 }
