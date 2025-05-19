@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using JobRECO.Models;
+
 
     
 
@@ -14,9 +14,16 @@ namespace JobRECO.Data
 {
     public class AppDbContext:DbContext
     {
+        /*
         public DbSet<User> Users => Set<User>();//データベースとのやりとり用の設定
         public DbSet<Attendance> Attendances => Set<Attendance>();//データベースとのやりとり用の設定
         public DbSet<WorkLog> WorkLogs => Set<WorkLog>();//データベースとのやりとり用の設定
+        */
+        public DbSet<User> Users { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<WorkLog> WorkLogs { get; set; }
+
+
 
         //使用するデータベースを指定する
         protected override void OnConfiguring(DbContextOptionsBuilder options)

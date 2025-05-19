@@ -9,9 +9,11 @@ namespace JobRECO.Models
 {
     public class User
     {
+        [Key]//主キー属性
         public int Id { get; set; }//IDプロパティ
 
-        [Required, MaxLength(50)]
+        [Required]
+        [MaxLength(50)]
         public string Username { get; set; } = string.Empty;//ユーザー名プロパティ
 
         [Required]
