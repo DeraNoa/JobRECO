@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace JobRECO.ViewModels
@@ -30,6 +31,11 @@ namespace JobRECO.ViewModels
         public ICommand ClockInCommand { get; }
         public ICommand ClockOutCommand { get; }
         public ICommand AddWorkLogCommand { get; }
+
+        public string NewProjectName { get; set; } = "";
+        public string NewDescription { get; set; } = "";
+        public string NewHours { get; set; } = "";
+
 
         public MainViewModel()
         {
@@ -93,21 +99,45 @@ namespace JobRECO.ViewModels
             }
         }
 
+    
+
         private void AddWorkLog()
         {
-            if (Attendance == null) return;
+            if (Attendance == null)
+            {
+                MessageBox.Show("出勤記録がありません。出勤してください。");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewProjectName) || !decimal.TryParse(NewHours, out var hours) || hours <= 0)
+            {
+                MessageBox.Show("正しいプロジェクト名と作業時間を入力してください。");
+                return;
+            }
+
             var log = new WorkLog
             {
                 AttendanceId = Attendance.Id,
-                ProjectName = "開発A", // 仮
-                Hours = 1.5m,
-                Description = "設計作業"
+                ProjectName = NewProjectName,
+                Description = NewDescription,
+                Hours = hours
             };
+
             using var db = new AppDbContext();
             db.WorkLogs.Add(log);
             db.SaveChanges();
+
             WorkLogs.Add(log);
+
+            // 入力欄クリア
+            NewProjectName = "";
+            NewDescription = "";
+            NewHours = "";
+            OnPropertyChanged(nameof(NewProjectName));
+            OnPropertyChanged(nameof(NewDescription));
+            OnPropertyChanged(nameof(NewHours));
         }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
